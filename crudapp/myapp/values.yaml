@@ -1,0 +1,47 @@
+service:
+  name: backend-service
+  app: myapp
+  type: NodePort
+  port: 3333
+  targetPort: 3333
+  nodePort: 30010
+
+deployment:
+  name: backend-deployment
+  app: myapp
+  replicaCount: 1
+
+containers:
+  name: myapp2
+  image: priyanshuthapliyal/crud_backend:v1
+  Port: 3333
+
+frontendsvc:
+  name: frontend-service
+  type: NodePort
+  app: crudapp
+  ports: 80
+  targetPort: 80
+  nodePort: 30007
+
+frontenddeploy:
+  name: frontend-deployment
+  app: crudapp
+
+frontendcontainer:
+  name: myapp
+  image: priyanshuthapliyal/crud_frontend:v2
+  containerPort: 80
+
+pvc:
+  name: backend-pv-claim
+  storage: 2Gi
+
+Volumes:
+   name: backend-persistent-storage
+   claimName: backend-pv-claim
+
+pv:
+  name: backend-pv-volume
+  storage: 10Gi
+  path: "/mnt/data"

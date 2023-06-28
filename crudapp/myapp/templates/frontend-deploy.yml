@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.frontendsvc.name }}
+spec:
+  type: {{ .Values.frontendsvc.type }}
+  selector:
+    app: {{ .Values.frontendsvc.app }}
+  ports:
+    - port: {{ .Values.frontendsvc.ports }}
+      targetPort: {{ .Values.frontendsvc.targetPort }}
+      nodePort: {{ .Values.frontendsvc.nodePort }}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.frontenddeploy.name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.frontenddeploy.app }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.frontenddeploy.app }}
+    spec:
+      containers:
+      - name: {{ .Values.frontendcontainer.name }}
+        image: {{ .Values.frontendcontainer.image }}
+        ports:
+        - containerPort: {{ .Values.frontendcontainer.containerPort }}
+        volumeMounts:
+        - name: {{ .Values.Volumes.name }}
+          mountPath: /var/lib/mysql
+      volumes:
+      - name: {{ .Values.Volumes.name }}
+        persistentVolumeClaim:
+          claimName: {{ .Values.Volumes.claimName }}
