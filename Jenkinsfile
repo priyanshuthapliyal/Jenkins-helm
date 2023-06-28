@@ -3,9 +3,7 @@ pipeline {
     stages {
     stage('Deploy Helm Chart') {
       steps {
-    
-        sh "cd crudapp"
-        sh "./deploy.sh"
+        sh './crudapp/deploy.sh'
       }
     }
   }
